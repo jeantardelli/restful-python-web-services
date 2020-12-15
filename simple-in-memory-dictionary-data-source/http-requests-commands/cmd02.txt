@@ -1,0 +1,13 @@
+#!/bin/bash
+
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"eSports competition starts in 2 minutes", "ttl":20, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"Ambient temperature is above the valid range", "ttl":15, "notification_category": "Warning"}' "localhost:5000/service/notifications/"
+
+curl -iX GET "localhost:5000/service/notifications/"
+
+curl -iX GET "localhost:5000/service/notifications/78"
+
+curl -iX PATCH -H "Content-Type: application/json" -d '{"displayed_once":"true", "displayed_times":1}' "localhost:5000/service/notifications/2"
+
+curl -iX DELETE "localhost:5000/service/notifications/2"

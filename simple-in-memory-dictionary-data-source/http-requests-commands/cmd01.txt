@@ -1,0 +1,11 @@
+#!/bin/bash
+
+http POST ":5000/service/notifications/" message='eSports competition starts in 2 minutes' ttl=20 notification_category='Information'
+
+http POST ":5000/service/notifications/" message='Ambient temperature is above the valid range' ttl=15 notification_category='Warning'
+
+http ":5000/service/notifications/"
+
+http ":5000/service/notifications/78"
+
+http PATCH ":5000/service/notifications/2" displayed_once=true displayed_times=1
