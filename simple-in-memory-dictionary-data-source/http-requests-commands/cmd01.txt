@@ -9,3 +9,5 @@ http ":5000/service/notifications/"
 http ":5000/service/notifications/78"
 
 http PATCH ":5000/service/notifications/2" displayed_once=true displayed_times=1
+
+http DELETE ":5000/service/notifications/2"

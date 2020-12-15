@@ -10,7 +10,7 @@ This repo contains RESTful recipes for different web services in Python.
 
 Directories
 ===========
-**simple-in-memory-dictionary-data-source:** In-memory dictionary data source RESTful web application using Flask
+**simple-in-memory-dictionary-data-source:** Simple RESTful API to interact with a simple, in-memory, data source using Flask
 
 License
 =======
