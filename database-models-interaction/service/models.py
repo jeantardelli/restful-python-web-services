@@ -25,20 +25,22 @@ class ResourceAddUpdateDelete:
         return db.session.commit()
 
 class Notification(db.Model, ResourceAddUpdateDelete):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer,primary_key=True)
     message = db.Column(db.String(250), unique=True, nullable=False)
     ttl = db.Column(db.Integer, nullable=False)
     creation_date = db.Column(db.TIMESTAMP,
-                               server_default=db.func.current_timestamp(),
-                               nullable=False)
+        server_default=db.func.current_timestamp(),
+        nullable=False)
     notification_category_id = db.Column(db.Integer,
-            db.ForeignKey('notification_category.id', ondelete='CASCADE'),
-            nullable=False)
+        db.ForeignKey('notification_category.id', ondelete='CASCADE'),
+        nullable=False)
     notification_category = db.relationship('NotificationCategory',
-            backref=db.backref('notifications', lazy='dynamic',
-            order_by='Notification.message'))
-    displayed_times = db.Column(db.Integer, nullable=False, server_default='0')
-    displayed_once = db.Column(db.Boolean, nullable=False, server_default='false')
+        backref=db.backref('notifications', lazy='dynamic',
+        order_by='Notification.message'))
+    displayed_times = db.Column(db.Integer, nullable=False,
+        server_default='0')
+    displayed_once = db.Column(db.Boolean, nullable=False,
+        server_default='0')
 
     def __init__(self, message, ttl, notification_category):
         self.message = message

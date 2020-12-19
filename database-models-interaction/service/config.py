@@ -7,21 +7,21 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_ECHO = False
 SQLALCHEMY_TRACK_MODIFICATIONS = True
-DATABASE_USER = os.environ.get('DB_USER')
-DATABASE_PASS = os.environ.get('DB_PASS')
-DATABASE_ADDR = os.environ.get('DB_ADDR')
-DATABASE_DEV = os.environ.get('DB_DEV')
-DATABASE_PROD = os.environ.get('DB_PROD') 
+DATABASE_USER = os.environ.get('DATABASE_USER')
+DATABASE_PASS = os.environ.get('DATABASE_PASS')
+DATABASE_ADDR = os.environ.get('DATABASE_ADDR')
+DATABASE_DEV = os.environ.get('DATABASE_DEV')
+DATABASE_PROD = os.environ.get('DATABASE_PROD') 
 
-if not DATABASE_DEV:
+if DATABASE_DEV:
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{user}:{pwd}@{addr}/{db_dev}".format(
-        user=Config.DATABASE_USER,
-        pwd=Config.DATABASE_PASS,
-        addr=Config.DATABASE_ADDR,
-        db_dev=Config.DATABASE_DEV)
+        user=DATABASE_USER,
+        pwd=DATABASE_PASS,
+        addr=DATABASE_ADDR,
+        db_dev=DATABASE_DEV)
 else:
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{user}:{pwd}@{addr}/{db_prod}".format(
-        user=Config.DATABASE_USER,
-        pwd=Config.DATABASE_PASS,
-        addr=Config.DATABASE_ADDR,
-        db_prod=Config.DATABASE_PROD)
+        user=DATABASE_USER,
+        pwd=DATABASE_PASS,
+        addr=DATABASE_ADDR,
+        db_prod=DATABASE_PROD)
