@@ -7,3 +7,7 @@ http POST ":5000/service/notifications/" message='No winners yet' ttl=15 notific
 http ":5000/service/notification_categories/1"
 
 http POST ":5000/service/notifications/" message='Score calculation error' ttl=30 notification_category="Error"
+
+http POST ":5000/service/notification_categories/" name='Error'
+
+http POST ":5000/service/notifications/" message='eSports competition finishes in 10 minutes' ttl=30, notification_category="Information"

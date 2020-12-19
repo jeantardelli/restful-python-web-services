@@ -27,6 +27,11 @@ class NotificationResource(Resource):
         if 'message' in notification_dict and \
                 notification_dict['message'] is not None:
             notification.message = notification_dict['messge']
+            if not Notification.is_message_unique(
+                    id=0, message=notification_message):
+                response = {'error': 'A notification with the message <{0}>'
+                            ' already exists'.format(notification_message)}
+                return response, HttpStatus.bad_request_400.value
         if 'ttl' in notification_dict and \
                 notification['ttl'] is not None:
             notification.duration = notification_dict['duration']
@@ -82,6 +87,12 @@ class NotificationListResource(Resource):
         if errors:
             return errors, HttpStatus.bad_request_400.value
 
+        notification_message = notification_category_dict['message']
+        if not Notification.is_message_unique(id=0, message=notification_message):
+            response = {'error': 'A notification with the message <{0}>'
+                        ' already exists'.format(notification_message)}
+            return response, HttpStatus.bad_request_400.value
+
         try:
             notification_category_name = notification_category_dict\
                     ['notification_category']['name']
@@ -97,7 +108,7 @@ class NotificationListResource(Resource):
 
             # Now we can create a new Notification
             notification = Notification(
-                message=notification_category_dict['message'],
+                message=notification_message,
                 ttl=notification_category_dict['ttl'],
                 notification_category=notification_category)
             notification.add(notification)
@@ -132,7 +143,14 @@ class NotificationCategoryResource(Resource):
         try:
             if 'name' in notification_category_dict and \
                     notification_category_dict['name'] is not None:
-                notification_category.name = notification_category_dict['name']
+                notification_category_name = notification_category_dict['name']
+                if NotificationCategory.is_name_unique(
+                        id=id, name=notification_category_name):
+                    notification_category.name = notification_category_name
+                else:
+                    response = {'error': 'A category with the name <{0}> already'
+                                ' exists'.format(notification_category_name)}
+                    return HttpStatus.bad_request_400.value
             notification_category.update()
             return self.get(id)
         except SQLAlchemyError as err:
@@ -172,9 +190,15 @@ class NotificationCategoryListResource(Resource):
         if errors:
             return errors, HttpStatus.bad_request_400.value
 
+        notification_category_name = notification_category_dict['name']
+        if not NotificationCategory.is_name_unique(id=0, name=notification_category_name):
+            response = {'error': 'A notification category with the name'
+                        ' <{0}> already exists'.format(notification_category_name)}
+            return response, HttpStatus.bad_request_400.value
+
         try:
             notification_category = NotificationCategory(
-                    notification_category_dict['name'])
+                    notification_category_name)
             notification_category.add(notification_category)
             query = NotificationCategory.query.get(notification_category.id)
             dump_result = notification_category_schema.dump(query).data

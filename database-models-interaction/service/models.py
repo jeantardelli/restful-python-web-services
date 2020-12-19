@@ -50,6 +50,17 @@ class Notification(db.Model, ResourceAddUpdateDelete):
     def __repr__(self):
         return '<Notification %r>' % self.message
 
+    @classmethod
+    def is_message_unique(cls, id, message):
+        existing_notification = cls.query.filter_by(message=message).first()
+        if existing_notification is None:
+            return True
+        else:
+            if existing_notification.id == id:
+                return True
+            else:
+                return False
+
 class NotificationCategory(db.Model, ResourceAddUpdateDelete):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=False)
@@ -59,6 +70,17 @@ class NotificationCategory(db.Model, ResourceAddUpdateDelete):
 
     def __repr__(self):
         return '<NotificationCategory %r>' % self.name
+
+    @classmethod
+    def is_name_unique(cls, id, name):
+        existing_notification_category = cls.query.filter_by(name=name).first()
+        if existing_notification_category is None:
+            return True
+        else:
+            if existing_notification_category.id == id:
+                return True
+            else:
+                return False
 
 class NotificationCategorySchema(ma.Schema):
     id = fields.Integer(dump_only=3)
