@@ -10,7 +10,7 @@ from models import db, NotificationCategory, NotificationCategorySchema, \
 from sqlalchemy.exc import SQLAlchemyError
 
 service_blueprint = Blueprint('service', __name__)
-notification_category_schema = NotificationCategorySchema
+notification_category_schema = NotificationCategorySchema()
 notification_schema = NotificationSchema()
 service = Api(service_blueprint)
 
@@ -60,7 +60,7 @@ class NotificationResource(Resource):
             delete = notification.delete(notification)
             response = make_response()
             return response, HttpStatus.no_content_204.value
-        except SQLAlchemy as err:
+        except SQLAlchemyError as err:
             db.session.rollback()
             response = {"error": str(err)}
             return response, HttpStatus.unauthorized_401.value
@@ -105,7 +105,7 @@ class NotificationListResource(Resource):
             query = Notification.query.get(notification.id)
             dump_result = notification_schema.dump(query).data
             return dump_result, HttpStatus.created_201.value
-        except SQLAlchemy as err:
+        except SQLAlchemyError as err:
             db.session.rollback()
             response = {"error": str(err)}
             return response, HttpStatus.bad_request_400.value
@@ -147,7 +147,7 @@ class NotificationCategoryResource(Resource):
             notification_category.delete(notification_category)
             response = make_response()
             return response, HttpStatus.no_content_204.value
-        except SQLAlchemy as err:
+        except SQLAlchemyError as err:
             db.session.rollback()
             response = {'error': str(err)}
             return response, HttpStatus.unauthorized_401.value
@@ -168,7 +168,7 @@ class NotificationCategoryListResource(Resource):
             return response, HttpStatus.bad_request_400.value
 
         errors = notification_category_schema.validate(
-            notification_category_dict)
+               notification_category_dict)
         if errors:
             return errors, HttpStatus.bad_request_400.value
 

@@ -1,0 +1,9 @@
+curl -iX POST -H "Content-Type: application/json" --data '{"name": "Information"}' "localhost:5000/service/notification_categories/"
+curl -iX POST -H "Content-Type: application/json" --data '{"name": "Warning"}' "localhost:5000/service/notification_categories/"
+
+curl -iX POST -H "Content-Type: application/json" -d '{"message": "eSports competition finishes in 10 minutes", "ttl": 30, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message": "No winners yet", "ttl": 15, "notification_category": "Warning"}' "localhost:5000/service/notifications/"
+
+curl -iX GET "localhost:5000/service/notification_categories/1"
+
+curl -iX POST -H "Content-Type: application/json" -d '{"message": "Score calculation error", "ttl": 30, "notification_category": "Error"}' "localhost:5000/service/notifications/"
