@@ -186,3 +186,11 @@ class NotificationCategoryListResource(Resource):
             response = {"error": str(err)}
             return response, HttpStatus.bad_request_400.value
 
+service.add_resource(NotificationCategoryListResource,
+        '/notification_categories/')
+service.add_resource(NotificationCategoryResource,
+        '/notification_categories/<int:id>')
+service.add_resource(NotificationListResource,
+        '/notifications/')
+service.add_resource(NotificationResource,
+        '/notifications/<int:id>')
