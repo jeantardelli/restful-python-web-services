@@ -13,3 +13,13 @@ curl -iX POST -H "Content-Type: application/json" --data '{"name": "Error"}' "lo
 curl -iX POST -H "Content-Type: application/json" -d '{"message": "eSports competition finishes in 10 minutes", "ttl": 30, "notification_category": "Information"}' "localhost:5000/service/notifications/"
 
 curl -iX PATCH -H "Content-Type: application/json" -d '{"displayed_times":1}' "localhost:5000/service/notifications/2"
+
+curl -iX POST -H "Content-Type: application/json" -d '{"message": "Clash Royale has a new winner", "ttl":25, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"Uncharted 4 has a new 2nd position score", "ttl":20, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"Fortnite has a new 4th position score", "ttl":18, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"Injustice 2 has a new winner", "ttl":14, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"PvZ Garden Warfare 2 has a new winner", "ttl":22, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"Madden NFL 19 has a new 3rd position score", "ttl":15, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"Madden NFL 19 has a new winner", "ttl":18, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"FIFA 19 has a new 3rd position score", "ttl":16, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+curl -iX POST -H "Content-Type: application/json" -d '{"message":"NBA Live 19 has a new winner", "ttl":5, "notification_category": "Information"}' "localhost:5000/service/notifications/"

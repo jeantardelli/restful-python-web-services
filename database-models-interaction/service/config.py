@@ -7,6 +7,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_ECHO = False
 SQLALCHEMY_TRACK_MODIFICATIONS = True
+
 DATABASE_USER = os.environ.get('DATABASE_USER')
 DATABASE_PASS = os.environ.get('DATABASE_PASS')
 DATABASE_ADDR = os.environ.get('DATABASE_ADDR')
@@ -25,3 +26,6 @@ else:
         pwd=DATABASE_PASS,
         addr=DATABASE_ADDR,
         db_prod=DATABASE_PROD)
+
+PAGINATION_PAGE_SIZE = 4
+PAGINATION_PAGE_ARGUMENT_NAME = 'page'
