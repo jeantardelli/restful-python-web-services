@@ -11,3 +11,5 @@ curl -iX POST -H "Content-Type: application/json" -d '{"message": "Score calcula
 curl -iX POST -H "Content-Type: application/json" --data '{"name": "Error"}' "localhost:5000/service/notification_categories/"
 
 curl -iX POST -H "Content-Type: application/json" -d '{"message": "eSports competition finishes in 10 minutes", "ttl": 30, "notification_category": "Information"}' "localhost:5000/service/notifications/"
+
+curl -iX PATCH -H "Content-Type: application/json" -d '{"displayed_times":1}' "localhost:5000/service/notifications/2"

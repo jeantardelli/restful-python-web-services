@@ -10,4 +10,6 @@ http POST ":5000/service/notifications/" message='Score calculation error' ttl=3
 
 http POST ":5000/service/notification_categories/" name='Error'
 
-http POST ":5000/service/notifications/" message='eSports competition finishes in 10 minutes' ttl=30, notification_category="Information"
+http POST ":5000/service/notifications/" message='eSports competition finishes in 10 minutes' ttl=30 notification_category="Information"
+
+http PATCH ":5000/service/notifications/2" displayed_times=1
