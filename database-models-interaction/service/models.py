@@ -1,12 +1,17 @@
 """
 This module contains the instances that will be used to represent and persist
-the notification categories, notifications and their relationship in the MySQL
-database.
+the users, the notification categories, the notifications and their relationship 
+in the MySQL database.
 """
+import re
+
 from marshmallow import Schema, fields, pre_load
 from marshmallow import validate
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+
+from passlib.apps import custom_app_context as password_context
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -23,6 +28,44 @@ class ResourceAddUpdateDelete:
     def delete(self, resource):
         db.session.delete(resource)
         return db.session.commit()
+
+class User(db.Model, ResourceAddUpdateDelete):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique= True, nullable=False)
+    password_hash = db.Column(db.String(20), nullable=False)
+    creation_date = db.Column(
+        db.TIMESTAMP,
+        server_default=db.func.current_timestamp(),
+        nullable=False)
+
+    def verify_password(self, password):
+        return password_context.verify(password, self.password_hash)
+
+    def check_password_strength_and_hash_if_ok(self, password):
+        if len(password) < 8:
+            return 'The password is too short. Please, specify a password with'\
+                    ' at least 8 characters.', False
+        if len(password) > 32:
+            return 'The password is too long. Please, specify a password with '\
+                    'no more than 32 characters.', False
+        if re.search(r'[A-Z]', password) is None:
+            return 'The password must include at least one lowercase letter.',\
+                    False
+        if re.search(r'[a-z]', password) is None:
+            return 'The password must include at least one lowercase letter.',\
+                    False
+        if re.search(r'\d', password) is None:
+            return 'The password must include at least one Number.', False
+        if re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) is None:
+            return 'The password must include at least one symbol.', False
+
+        # Save the hash for the password and not the actual one
+        self.password_hash = password_context.hash(password)
+
+        return '', True
+
+    def __init__(self, name):
+        self.name = name
 
 class Notification(db.Model, ResourceAddUpdateDelete):
     id = db.Column(db.Integer,primary_key=True)

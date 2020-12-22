@@ -7,3 +7,5 @@ marshmallow==2.16.0
 marshmallow-sqlalchemy==0.14.1
 flask-marshmallow==0.9.0
 mysql-connector-python==8.0.22
+flask-HTTPAuth==3.2.4
+passlib==1.7.1
