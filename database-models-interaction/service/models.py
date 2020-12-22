@@ -166,3 +166,8 @@ class NotificationSchema(ma.Schema):
             notification_category_dict = {}
         data['notification_category'] = notification_category_dict
         return data
+
+class UserSchema(ma.Schema):
+    id = fields.Integer(dump_only=True)
+    name = fields.String(required=True, validate=validate.Length(3))
+    url = ma.URLFor('service.userresource', id='<id>', _external=True)
