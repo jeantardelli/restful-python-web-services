@@ -8,6 +8,7 @@ from http_status import HttpStatus
 from models import db, NotificationCategory, NotificationCategorySchema, \
         Notification, NotificationSchema
 from sqlalchemy.exc import SQLAlchemyError
+from helpers import PaginationHelper
 
 service_blueprint = Blueprint('service', __name__)
 notification_category_schema = NotificationCategorySchema()
@@ -73,9 +74,15 @@ class NotificationResource(Resource):
 
 class NotificationListResource(Resource):
     def get(self):
-        notifications = Notification.query.all()
-        dump_result = notification_schema.dump(notifications, many=True).data
-        return dump_result
+        pagination_helper = PaginationHelper(
+            request,
+            query=Notification.query,
+            resource_for_url='service.notificationlistresource',
+            key_name='results',
+            schema=notification_schema)
+        pagination_result = pagination_helper.paginate_query()
+
+        return pagination_result
 
     def post(self):
         notification_category_dict = request.get_json()

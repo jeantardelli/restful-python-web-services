@@ -23,3 +23,8 @@ http POST ":5000/service/notifications/" message='Madden NFL 19 has a new 3rd po
 http POST ":5000/service/notifications/" message='Madden NFL 19 has a new winner' ttl=18 notification_category='Information'
 http POST ":5000/service/notifications/" message='FIFA 19 has a new 3rd position score' ttl=16 notification_category='Information'
 http POST ":5000/service/notifications/" message='NBA Live 19 has a new winner' ttl=5 notification_category='Information'
+
+http ":5000/service/notifications/"
+http ":5000/service/notifications/?page=1"
+http ":5000/service/notifications/?page=2"
+http ":5000/service/notifications/?page=3"

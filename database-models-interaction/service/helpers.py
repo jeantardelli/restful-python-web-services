@@ -19,7 +19,7 @@ class PaginationHelper():
     def paginate_query(self):
         # Assumes page number 1 if page not specified
         page_number = self.request.args.get(self.page_argument_name, 1, type=int)
-        pageinated_objects = self.query.paginate(
+        paginated_objects = self.query.paginate(
             page_number,
             per_page=self.page_size,
             error_out=False)
