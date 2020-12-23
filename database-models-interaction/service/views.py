@@ -1,21 +1,38 @@
 """
-This module contain code that creates the resources that compose the building
-blocks for the RESTful API.
+This module contain code that creates the resources, authentication and 
+pagination that compose the building blocks for the RESTful API.
 """
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, g
 from flask_restful import Api, Resource
+from flask_httpauth import HTTPBasicAuth
+
+from helpers import PaginationHelper
 from http_status import HttpStatus
+
 from models import db, NotificationCategory, NotificationCategorySchema, \
         Notification, NotificationSchema
 from sqlalchemy.exc import SQLAlchemyError
-from helpers import PaginationHelper
 
+auth = HTTPBasicAuth()
 service_blueprint = Blueprint('service', __name__)
+
 notification_category_schema = NotificationCategorySchema()
 notification_schema = NotificationSchema()
+
 service = Api(service_blueprint)
 
-class NotificationResource(Resource):
+@auth.verify_password
+def verify_user_password(name, password):
+    user = User.query.filter_by(name=name).first()
+    if not user or not user.verify_password(password):
+        return False
+    g.user = user
+    return True
+
+class AuthenticationRequiredResource(Resource):
+    method_decorators = [auth.login_required]
+
+class NotificationResource(AuthenticationRequiredResource):
     def get(self, id):
         notification = Notification.query.get_or_404(id)
         dumped_notification = notification_schema.dump(notification).data
@@ -72,7 +89,7 @@ class NotificationResource(Resource):
             response = {"error": str(err)}
             return response, HttpStatus.unauthorized_401.value
 
-class NotificationListResource(Resource):
+class NotificationListResource(AuthenticationRequiredResource):
     def get(self):
         pagination_helper = PaginationHelper(
             request,
@@ -129,7 +146,7 @@ class NotificationListResource(Resource):
             response = {"error": str(err)}
             return response, HttpStatus.bad_request_400.value
 
-class NotificationCategoryResource(Resource):
+class NotificationCategoryResource(AuthenticationRequiredResource):
     def get(self, id):
         notification_category = NotificationCategory.query.get_or_404(id)
         dump_result = notification_category_schema.dump(notification_category)\
@@ -178,7 +195,7 @@ class NotificationCategoryResource(Resource):
             response = {'error': str(err)}
             return response, HttpStatus.unauthorized_401.value
 
-class NotificationCategoryListResource(Resource):
+class NotificationCategoryListResource(AuthenticationRequiredResource):
     def get(self):
         notification_categories = NotificationCategory.query.all()
         dump_results = notification_category_schema.dump(
