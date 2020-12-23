@@ -1,3 +1,8 @@
+curl -iX POST -H "Content-Type: application/json" -d '{"name": "jean-carlo", "password": "wrongpass"}' "localhost:5000/service/users/"
+curl -iX POST -H "Content-Type: application/json" -d '{"name": "jean-carlo", "password": "#V4lidPass"}' "localhost:5000/service/users/"
+
+curl --user 'jean-carlo':'#V4lidPass' -iX GET "localhost:5000/service/notifications/?page=1"
+
 curl -iX POST -H "Content-Type: application/json" --data '{"name": "Information"}' "localhost:5000/service/notification_categories/"
 curl -iX POST -H "Content-Type: application/json" --data '{"name": "Warning"}' "localhost:5000/service/notification_categories/"
 

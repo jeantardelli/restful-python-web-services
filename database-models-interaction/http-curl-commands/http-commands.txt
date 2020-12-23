@@ -1,3 +1,8 @@
+http POST ":5000/service/users/" name='jean-carlo' password='wrongpass'
+http POST ":5000/service/users/" name='jean-carlo' password='#V4lidPass'
+
+http -a 'jean-carlo':'#V4lidPass' ":5000/service/notifications/?page=1"
+
 http POST ":5000/service/notification_categories/" name='Information'
 http POST ":5000/service/notification_categories/" name='Warning'
 

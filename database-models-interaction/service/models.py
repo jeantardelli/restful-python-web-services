@@ -32,7 +32,7 @@ class ResourceAddUpdateDelete:
 class User(db.Model, ResourceAddUpdateDelete):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique= True, nullable=False)
-    password_hash = db.Column(db.String(20), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
     creation_date = db.Column(
         db.TIMESTAMP,
         server_default=db.func.current_timestamp(),
