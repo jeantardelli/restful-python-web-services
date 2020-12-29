@@ -14,6 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 def application():
     # Beggining of Setup code
     app = create_app('config')
+    app.config['SERVER_NAME'] = 'localhost'
     with app.app_context():
         # End of Setup code
         db.create_all()

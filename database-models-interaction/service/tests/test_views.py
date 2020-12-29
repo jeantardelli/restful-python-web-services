@@ -5,10 +5,11 @@ import pytest
 from base64 import b64encode
 from http_status import HttpStatus
 from flask import current_app, json, url_for
-from models import db, NotificationCategory, Nofitication, User
+from models import db, NotificationCategory, Notification, User
 
 TEST_USER_NAME = 'testuser'
 TEST_USER_PASS = 'T3stP4ss#'
+SERVER_NAME='localhost'
 
 def get_accept_content_type_headers():
     return {
@@ -54,7 +55,7 @@ def test_create_and_retrieve_notification_category(client):
     """
     Ensure we can create a new Notification Category and the retreive it.
     """
-    create_user_response = create_user(client, TEST_USER_NAME, TEST_USE_PASS)
+    create_user_response = create_user(client, TEST_USER_NAME, TEST_USER_PASS)
     assert create_user_response.status_code == HttpStatus.created_201.value
 
     new_notification_category_name = 'New Information'
@@ -65,10 +66,10 @@ def test_create_and_retrieve_notification_category(client):
     post_response_data = json.loads(post_response.get_data(as_text=True))
     assert post_response_data['name'] == new_notification_category_name
 
-    new_notification_category_url = post_response_dat['url']
+    new_notification_category_url = post_response_data['url']
     get_response = client.get(
         new_notification_category_url,
-        headers=get_authentication_headers(TEST_USER_NAME, TEST_USER_PASSWORD))
+        headers=get_authentication_headers(TEST_USER_NAME, TEST_USER_PASS))
     assert get_response.status_code == HttpStatus.ok_200.value
 
     get_response_data = json.loads(get_response.get_data(as_text=True))
@@ -89,7 +90,7 @@ def test_create_duplicated_notification_category(client):
     assert NotificationCategory.query.count() == 1
 
     post_response_data = json.loads(post_response.get_data(as_text=True))
-    assert post_reponse_data['name'] == new_notification_category_name
+    assert post_response_data['name'] == new_notification_category_name
 
     second_post_response = create_notification_category(
         client,
@@ -113,19 +114,23 @@ def test_retrieve_notification_categories_list(client):
     new_notification_category_name_two = 'Warning'
     post_response_two = create_notification_category(
         client,
-        new_notificatoin_category_name_two)
+        new_notification_category_name_two)
     assert post_response_two.status_code == HttpStatus.created_201.value
 
     url = url_for('service.notificationcategorylistresource', _external=True)
     get_response = client.get(
         url,
-        headers=get_authentication_headers(TEST_USER_NAME, TEST_USER_PASSWORD))
+        headers=get_authentication_headers(TEST_USER_NAME, TEST_USER_PASS))
     assert get_response.status_code == HttpStatus.ok_200.value
 
+    url = url_for('service.notificationcategorylistresource', _external=True)
+    get_response = client.get(
+        url,
+        headers=get_authentication_headers(TEST_USER_NAME, TEST_USER_PASS))
     get_response_data = json.loads(get_response.get_data(as_text=True))
     assert len(get_response_data) == 2
-    assert get_response_data[0]['name'] == new_notification_category_name_1
-    assert get_response_data[1]['name'] == new_notification_category_name_2
+    assert get_response_data[0]['name'] == new_notification_category_name_one
+    assert get_response_data[1]['name'] == new_notification_category_name_two
 
 def test_update_notification_category(client):
     """
@@ -143,12 +148,15 @@ def test_update_notification_category(client):
     post_response_data_one = json.loads(post_response_one.get_data(as_text=True))
     new_notification_category_url = post_response_data_one['url']
     new_notification_category_name_two = 'Error 2'
-    data = {'name': new_notification_category_name_2}
+    data = {'name': new_notification_category_name_two}
     patch_response = client.patch(
         new_notification_category_url,
         headers=get_authentication_headers(TEST_USER_NAME, TEST_USER_PASS),
         data=json.dumps(data))
     assert patch_response.status_code == HttpStatus.ok_200.value
 
+    get_response = client.get(
+        new_notification_category_url,
+        headers=get_authentication_headers(TEST_USER_NAME, TEST_USER_PASS))
     get_response_data = json.loads(get_response.get_data(as_text=True))
     assert get_response_data['name'] == new_notification_category_name_two
