@@ -15,6 +15,8 @@ DATABASE_DEV = os.environ.get('DATABASE_DEV')
 DATABASE_PROD = os.environ.get('DATABASE_PROD') 
 
 if DATABASE_DEV:
+    TESTING = True
+    WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{user}:{pwd}@{addr}/{db_dev}".format(
         user=DATABASE_USER,
         pwd=DATABASE_PASS,
