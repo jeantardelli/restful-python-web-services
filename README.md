@@ -5,7 +5,7 @@
 
 Restful Python Web Services
 ===========================
-This repo contains RESTful recipes for different web services in Python.
+This repo contains my code for the RESTful recipes for different web services in Python found in [Hands On RESTful Python We Services 2nd Edition](https://github.com/PacktPublishing/Hands-On-RESTful-Python-Web-Services-Second-Edition).
 
 Directories
 ===========
